@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="ja">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#5944cd"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="大きな数字と楽しい演出。みんなで遊べる75球ビンゴ抽選ゲーム。"><title>わくわくビンゴ！</title><link rel="icon" href="icon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="icon-192.png"><link rel="manifest" href="manifest.webmanifest"><link rel="stylesheet" href="style.css"></head>
+<body>
+<div class="app">
+ <header><a class="brand" href="./" aria-label="わくわくビンゴ ホーム"><span class="brand-icon">B</span><span>わくわく<span class="purple">ビンゴ！</span><small>みんなで、いっしょに。</small></span></a><nav><button id="sound" class="utility" aria-label="効果音を切り替え">♪ <span>音 ON</span></button><button id="fullscreen" class="utility">⛶ <span>全画面</span></button><button id="settings" class="utility">⚙ <span>設定</span></button></nav></header>
+ <p class="orientation">横向きにすると、より見やすく遊べます</p>
+ <main>
+  <section class="play-panel" aria-label="ビンゴ抽選">
+   <div class="panel-top"><span class="pill">LET’S PLAY BINGO</span><span id="draw-count">0 / 75 回</span></div>
+   <div class="stage" id="stage"><div class="stage-orbit orbit-one"></div><div class="stage-orbit orbit-two"></div><span class="spark spark-one">✦</span><span class="spark spark-two">✦</span><span class="spark spark-three">✧</span>
+    <div id="animation" aria-hidden="true"><canvas id="scene" width="640" height="480"></canvas></div>
+    <div class="result" id="result" hidden><span id="letter"></span><strong id="number"></strong></div>
+    <div id="countdown" aria-hidden="true"></div><div id="confetti" aria-hidden="true"></div>
+   </div>
+   <div class="play-caption"><h1 id="message" aria-live="polite">次は、何番かな？</h1><p id="hint">ボタンを押して、ビンゴをはじめよう！</p></div>
+   <div class="play-actions"><button id="draw" class="draw-button"><span>✦</span> 抽選する <span>✦</span></button><label class="mode-label" for="mode">抽選の演出 <select id="mode"><option value="machine">ビンゴマシーン</option><option value="treasure">宝箱</option><option value="rocket">ロケット</option><option value="monster">モンスターカプセル</option><option value="simple">シンプル（演出なし）</option><option value="random">おまかせ</option></select></label></div>
+  </section>
+  <section class="board-panel" aria-labelledby="board-title"><div class="board-top"><h2 id="board-title">出た数字をチェック</h2><span class="latest-key"><i></i>いまの数字</span></div><div class="stats"><div><span>前回の数字</span><strong id="previous">—</strong></div><div><span>残りの数字</span><strong><b id="remaining">75</b><small>個</small></strong></div></div><div class="board-tabs" role="tablist" aria-label="数字の並び方"><button id="numbers-tab" role="tab" aria-selected="true" aria-controls="board" tabindex="0">数字順</button><button id="order-tab" role="tab" aria-selected="false" aria-controls="order-panel" tabindex="-1">出た順</button></div><div id="board" class="board" role="tabpanel" aria-labelledby="numbers-tab" tabindex="0"></div><div id="order-panel" role="tabpanel" aria-labelledby="order-tab" tabindex="0" hidden><p class="order-guide">左から右へ、出た順番に表示</p><ol id="order-list"></ol><p id="order-empty">まだ数字は出ていません</p></div><div class="board-bottom"><span id="board-summary">まだ数字は出ていません</span><button id="history" class="text-button">履歴を見る ↗</button></div></section>
+ </main>
+ <footer><span>いっしょにワクワク、最後のひとつまで。</span><div class="reset-actions"><button id="restore" class="text-button" disabled>↶ 前のゲームに戻す</button><button id="reset" class="text-button">↻ リセット</button></div></footer><p id="notice" role="status"></p>
+</div>
+<dialog id="settings-dialog"><form method="dialog"><div class="dialog-title"><h2>遊びかたの設定</h2><button class="close" aria-label="閉じる">×</button></div><label class="setting">BINGOの文字を表示<input type="checkbox" id="letters-setting"></label><label class="setting">効果音<input type="checkbox" id="sound-setting"></label><label class="setting">数字を読み上げる<input type="checkbox" id="speech-setting"></label><label class="setting">演出の速さ<select id="speed-setting"><option value="normal">通常</option><option value="fast">はやい</option></select></label><p class="dialog-note">設定とゲームの続きは、このブラウザに保存されます。読み上げは端末の日本語音声を使います。</p><button class="primary">できた！</button></form></dialog>
+<dialog id="history-dialog"><div class="dialog-title"><h2>抽選の履歴</h2><button class="close" aria-label="閉じる">×</button></div><p class="dialog-note">上から、出た順番に並んでいます。</p><ol id="history-list"></ol></dialog>
+<dialog id="reset-dialog"><form method="dialog"><h2>本当にリセットしますか？</h2><p class="dialog-note">数字と履歴をリセットして、最初からはじめます。直前のゲームは1回分保存され、「前のゲームに戻す」で復元できます。設定はそのままです。</p><div class="dialog-actions"><button value="cancel" class="secondary">つづける</button><button value="reset" class="primary">最初からはじめる</button></div></form></dialog>
+<dialog id="restore-dialog"><form method="dialog"><h2>前のゲームに戻しますか？</h2><p id="restore-summary" class="dialog-note"></p><p class="dialog-note">現在のゲームを、リセット前の状態に戻します。遊びかたの設定はそのままです。</p><div class="dialog-actions"><button value="cancel" class="secondary">やめる</button><button value="restore" class="primary">前のゲームに戻す</button></div></form></dialog>
+<script src="engine.js"></script><script src="app.js"></script>
+</body></html>
